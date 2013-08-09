@@ -2,10 +2,13 @@
 # git config --global user.email "jonschipp@gmail.com"
 # git config --global core.editor "vim"
 # git config --global color.ui true
+# git config --global core.excludesfile ~/.gitignore_global
+
 [user]
 	name = Jon Schipp
 	email = jonschipp@gmail.com
 [core]
 	editor = vim
+	excludesfile = ~/.gitignore_global
 [color]
 	ui = true
