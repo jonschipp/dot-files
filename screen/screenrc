@@ -87,6 +87,10 @@ terminfo hp700 'Z0=\E[?3h:Z1=\E[?3l:hs:ts=\E[62"p\E[0$~\E[2$~\E[1$}:fs=\E[0}\E[6
 termcap wy75-42 nx:xo:Z0=\E[?3h\E[31h:Z1=\E[?3l\E[31h
 terminfo wy75-42 nx:xo:Z0=\E[?3h\E[31h:Z1=\E[?3l\E[31h
 
+# On OSX, use scrollback buffer with terminal scroll bars
+termcapinfo xterm ti@:te@
+termcapinfo xterm-color ti@:te@
+
 #remove some stupid / dangerous key bindings
 bind ^k
 #bind L
