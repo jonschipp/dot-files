@@ -1,0 +1,53 @@
+# Variables
+export EDITOR=vim
+export PS1='\n\e[0;33m<\e[m\e[0;31m\u\e[m\e[0;33m@\e[m\e[0;31m\h\e[m\e[0;33m>\e[m \e[0;33m[\e[m\w\e[0;33m]\e[m \e[0;34m\l\e[m \e[0;31mlvl\e[m(\e[0;33m${SHLVL}\e[m) \e[0;31m!\e[m\e[0;33m\!\e[m \e[0;31mjobs\e[m(\e[0;33m\j\e[m) \D{%A %m-%d-%Y %X}\n$ '
+export CLICOLOR=1
+export GREP_OPTIONS='--color=auto'
+export LSCOLORS=ExFxCxDxBxegedabagacad
+export LESSOPEN="| /usr/local/Cellar/source-highlight/3.1.7/bin/src-hilite-lesspipe.sh %s" # Install GNU Source-Highlights
+export LESS=' -R '
+
+
+# System-wide .bashrc file for interactive bash(1) shells.
+if [ -z "$PS1" ]; then
+   return
+fi
+
+# Make bash check its window size after a process completes
+shopt -s checkwinsize
+# Save multi-line commands to history
+shopt -s cmdhist
+# Append, don't overwrite, history
+shopt -s histappend
+# Use emacs mode
+set -o emacs
+
+# Allow forward search by disabling stop key (def:CTRL^S)
+stty stop ""
+
+if [ -f ~/.git-completion.bash ]; then
+		source ~/.git-completion.bash
+fi
+
+# Shell functions
+
+colorize () {
+	awk '{ for(i=1;i<=NF;i++) printf("\x1b[%sm %s \x1b[0m",(i%7)+31,$i); print ""}'
+}
+
+shelldebug () {
+	if [ $1 == "on" ]; then
+		set -xv
+	elif [ $1 == "off" ]; then
+		set +xv
+	else
+		echo "Error: Use arguments \`\`on'' or \`\`off''."
+	fi
+}
+
+SSH_COMPLETE=( $(cat ~/.ssh/known_hosts | \
+	cut -f 1 -d ' ' | \
+	sed -e s/,.*//g | \
+	uniq | \
+	egrep -v [0123456789]) )
+	complete -o default -W "${SSH_COMPLETE[*]}" ssh
