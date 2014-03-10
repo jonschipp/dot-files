@@ -42,6 +42,9 @@ vbell_msg "   Goddamnit!!!  "
 # IC    insert multiple chars
 # nx    terminal uses xon/xoff
 
+# http://chenyufei.info/blog/2011-12-15/prevent-vim-less-clear-screen-on-exit/
+alterscreen off
+
 termcap  facit|vt100|xterm LP:G0
 terminfo facit|vt100|xterm LP:G0
 
