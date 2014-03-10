@@ -14,7 +14,8 @@
 # git config --global diff.exif.textconv exiftool
 # git config --global filter.indent.clean indent
 # git config --global filter.indent.smudge cat
-#
+# git config --global pull.rebase true # auto rebase on git pull
+
 [user]
 	name = Jon Schipp
 	email = jonschipp@gmail.com
@@ -26,6 +27,7 @@
 	ui = true
 [push]
 	default = simple
+	rebase = true
 [sendemail]
         smtpencryption = tls
 	smtpserver = smtp.gmail.com
