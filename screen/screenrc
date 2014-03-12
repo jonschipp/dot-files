@@ -23,7 +23,7 @@ vbell on
 vbell_msg "   Goddamnit!!!  "
 
 # http://chenyufei.info/blog/2011-12-15/prevent-vim-less-clear-screen-on-exit/
-alterscreen off
+#alterscreen off
 
 
 ###################
@@ -33,12 +33,8 @@ alterscreen off
 multiuser on
 
 # Before careful with these, remove if not using.
-acladd vagrant
-acladd root
-acladd admin
-acladd Admin
-acladd administrator
-acladd Administrator
+aclchg vagrant,root,admin,Admin,administrator,Administrator,training -rwx "#?"
+# acladd training luXfQCsdHd4zQ # requires password: training
 
 termcap  facit|vt100|xterm LP:G0
 terminfo facit|vt100|xterm LP:G0
