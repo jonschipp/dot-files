@@ -33,7 +33,7 @@ vbell_msg "   Goddamnit!!!  "
 multiuser on
 
 # Before careful with these, remove if not using.
-aclchg vagrant,root,admin,Admin,administrator,Administrator,training -rwx "#?"
+aclchg vagrant,root,admin,Admin,administrator,Administrator,training,test,testuser -rwx "#?"
 # acladd training luXfQCsdHd4zQ # requires password: training
 
 termcap  facit|vt100|xterm LP:G0
