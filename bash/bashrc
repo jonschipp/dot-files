@@ -7,6 +7,8 @@ export LSCOLORS=ExFxCxDxBxegedabagacad
 export LESSOPEN="| /usr/local/Cellar/source-highlight/3.1.7/bin/src-hilite-lesspipe.sh %s" # Install GNU Source-Highlights
 export LESS=' -R '
 
+HISTFILESIZE=1000000
+HISTSIZE=1000000
 
 # System-wide .bashrc file for interactive bash(1) shells.
 if [ -z "$PS1" ]; then
@@ -35,6 +37,14 @@ colorize () {
 	awk '{ for(i=1;i<=NF;i++) printf("\x1b[%sm %s \x1b[0m",(i%7)+31,$i); print ""}'
 }
 
+keeptrying ()
+{
+    while true; do
+        git pull && break;
+        sleep 10;
+    done
+}
+
 shelldebug () {
 	if [ $1 == "on" ]; then
 		set -xv
@@ -43,6 +53,25 @@ shelldebug () {
 	else
 		echo "Error: Use arguments \`\`on'' or \`\`off''."
 	fi
+}
+
+rebuild () {
+        vagrant destroy && vagrant up --no-provision
+        vagrant provision --provision-with shell
+        vagrant reload --no-provision
+}
+
+provision () {
+        vagrant provision --provision-with=$1
+}
+
+invoice (){
+        awk -F '[{}]' -v wage=$1 -v expense=0 \
+        '/hourrow/ { labor+=$4 } # Multiply number of hours by wage
+        /feerow/ { expense+=$4 } # Add expenses
+        END {
+                print "Total: $"(labor*wage)+expense
+        }' $2
 }
 
 SSH_COMPLETE=( $(cat ~/.ssh/known_hosts | \
