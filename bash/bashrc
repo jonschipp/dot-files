@@ -1,6 +1,6 @@
 # Variables
 export EDITOR=vim
-export PS1='\n\e[0;33m<\e[m\e[0;31m\u\e[m\e[0;33m@\e[m\e[0;31m\h\e[m\e[0;33m>\e[m \e[0;33m[\e[m\w\e[0;33m]\e[m \e[0;34m\l\e[m \e[0;31mlvl\e[m(\e[0;33m${SHLVL}\e[m) \e[0;31m!\e[m\e[0;33m\!\e[m \e[0;31mjobs\e[m(\e[0;33m\j\e[m) \D{%A %m-%d-%Y %X}\n$ '
+export PS1='\n\e[0;33m<\e[m\e[0;31m\u\e[m\e[0;33m@\e[m\e[0;31m\h\e[m\e[0;33m>\e[m \e[0;33m[\e[m\w\e[0;33m]\e[m \e[0;34m\l\e[m \e[0;31mlvl\e[m(\e[0;33m${SHLVL}\e[m) \e[0;31m!\e[m\e[0;33m\!\e[m \e[0;31mjobs\e[m(\e[0;33m\j\e[m) \D{%A %m-%d-%Y %X} \e[0;31mexit\e[m(\e[0;33m$?\e[m)\n$ '
 export CLICOLOR=1
 export GREP_OPTIONS='--color=auto'
 export LSCOLORS=ExFxCxDxBxegedabagacad
