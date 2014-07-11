@@ -74,6 +74,15 @@ invoice (){
         }' $2
 }
 
+checkbpf () {
+        echo -en "\0324\0303\0262\0241\02\0\04\0\0\0\0\0\0\0\0\0\0377\0377\0\0\01\0\0\0" | tcpdump -r - "$1" 2>/dev/null
+        if [ $? -eq 0 ]; then
+                echo "Valid Ethernet BPF: $?"
+        else
+                echo "Invalid Ethernet BPF: $?"
+        fi
+}
+
 SSH_COMPLETE=( $(cat ~/.ssh/known_hosts | \
 	cut -f 1 -d ' ' | \
 	sed -e s/,.*//g | \
