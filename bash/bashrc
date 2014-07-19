@@ -10,6 +10,9 @@ export LESS=' -R '
 HISTFILESIZE=1000000
 HISTSIZE=1000000
 
+# Allow forward-search with ^S instead of sending pause to terminal
+stty -ixon
+
 # System-wide .bashrc file for interactive bash(1) shells.
 if [ -z "$PS1" ]; then
    return
