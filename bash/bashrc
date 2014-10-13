@@ -1,12 +1,17 @@
 # Variables
 export EDITOR=vim
-export PS1='\n\e[0;33m<\e[m\e[0;31m\u\e[m\e[0;33m@\e[m\e[0;31m\h\e[m\e[0;33m>\e[m \e[0;33m[\e[m\w\e[0;33m]\e[m \e[0;34m\l\e[m \e[0;31mlvl\e[m(\e[0;33m${SHLVL}\e[m) \e[0;31m!\e[m\e[0;33m\!\e[m \e[0;31mjobs\e[m(\e[0;33m\j\e[m) \D{%A %m-%d-%Y %X}\n$ '
+export PS1='\n\e[0;33m<\e[m\e[0;31m\u\e[m\e[0;33m@\e[m\e[0;31m\h\e[m\e[0;33m>\e[m \e[0;33m[\e[m\w\e[0;33m]\e[m \e[0;34m\l\e[m \e[0;31mlvl\e[m(\e[0;33m${SHLVL}\e[m) \e[0;31m!\e[m\e[0;33m\!\e[m \e[0;31mjobs\e[m(\e[0;33m\j\e[m) \D{%A %m-%d-%Y %X} \e[0;31mexit\e[m(\e[0;33m$?\e[m)\n$ '
 export CLICOLOR=1
 export GREP_OPTIONS='--color=auto'
 export LSCOLORS=ExFxCxDxBxegedabagacad
 export LESSOPEN="| /usr/local/Cellar/source-highlight/3.1.7/bin/src-hilite-lesspipe.sh %s" # Install GNU Source-Highlights
 export LESS=' -R '
 
+HISTFILESIZE=1000000
+HISTSIZE=1000000
+
+# Allow forward-search with ^S instead of sending pause to terminal
+stty -ixon
 
 # System-wide .bashrc file for interactive bash(1) shells.
 if [ -z "$PS1" ]; then
@@ -35,6 +40,14 @@ colorize () {
 	awk '{ for(i=1;i<=NF;i++) printf("\x1b[%sm %s \x1b[0m",(i%7)+31,$i); print ""}'
 }
 
+keeptrying ()
+{
+    while true; do
+        git pull && break;
+        sleep 10;
+    done
+}
+
 shelldebug () {
 	if [ $1 == "on" ]; then
 		set -xv
@@ -43,6 +56,34 @@ shelldebug () {
 	else
 		echo "Error: Use arguments \`\`on'' or \`\`off''."
 	fi
+}
+
+rebuild () {
+        vagrant destroy && vagrant up --no-provision
+        vagrant provision --provision-with shell
+        vagrant reload --no-provision
+}
+
+provision () {
+        vagrant provision --provision-with=$1
+}
+
+invoice (){
+        awk -F '[{}]' -v wage=$1 -v expense=0 \
+        '/hourrow/ { labor+=$4 } # Multiply number of hours by wage
+        /feerow/ { expense+=$4 } # Add expenses
+        END {
+                print "Total: $"(labor*wage)+expense
+        }' $2
+}
+
+checkbpf () {
+        echo -en "\0324\0303\0262\0241\02\0\04\0\0\0\0\0\0\0\0\0\0377\0377\0\0\01\0\0\0" | tcpdump -r - "$1" 2>/dev/null
+        if [ $? -eq 0 ]; then
+                echo "Valid Ethernet BPF: $?"
+        else
+                echo "Invalid Ethernet BPF: $?"
+        fi
 }
 
 SSH_COMPLETE=( $(cat ~/.ssh/known_hosts | \

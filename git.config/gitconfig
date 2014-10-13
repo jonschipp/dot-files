@@ -25,6 +25,8 @@
 	whitespace = trailing-space,space-before-tab,indent-wth-non-tab
 [color]
 	ui = true
+[pull]
+	rebase = true
 [push]
 	default = simple
 	rebase = true
