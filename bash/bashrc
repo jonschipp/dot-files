@@ -1,4 +1,27 @@
 # Variables
+
+# Colors for prompt
+normal="$(tput sgr0)"
+bold="$(tput bold)"
+underline="$(tput smul)"
+yellow="$(tput setaf 3)"
+blackf="$(tput setaf 0)"
+blackb="$(tput setab 0)"
+redf="$(tput setaf 1)"
+redb="$(tput setab 1)"
+greenf="$(tput setaf 2)"
+greenb="$(tput setab 2)"
+bluef="$(tput setaf 4)"
+blueb="$(tput setab 4)"
+magentaf="$(tput setaf 5)"
+magentab="$(tput setab 5)"
+cyanf="$(tput setaf 6)"
+cyanb="$(tput setab 6)"
+whitef="$(tput setaf 7)"
+whiteb="$(tput setab 7)"
+
+#export PS1='\n\e[0;33m<\e[m\e[0;31m\u\e[m\e[0;33m@\e[m\e[0;31m\h\e[m\e[0;33m>\e[m \e[0;33m[\e[m\w\e[0;33m]\e[m \e[0;34m\l\e[m \e[0;31mlvl\e[m(\e[0;33m${SHLVL}\e[m) \e[0;31m!\e[m\e[0;33m\!\e[m \e[0;31mjobs\e[m(\e[0;33m\j\e[m) \D{%A %m-%d-%Y %X} \e[0;31mexit\e[m(\e[0;33m$?\e[m)\n$ '
+export PS1='\n${yellow}<${normal}${redf}\u${normal}${yellow}@${normal}${redf}\h${normal}${yellow}>${normal} ${yellow}[${normal}\w${yellow}]${normal} ${bluef}\l${normal} ${redf}lvl${normal}(${yellow}$SHLVL${normal}) ${redf}!${normal}${yellow}\!${normal} ${redf}jobs${normal}(${yellow}\j${normal}) \D{%A %m-%d-%Y %X} ${redf}exit${normal}(${yellow}$?${normal})\n$ '
 export EDITOR=vim
 export PS1='\n\e[0;33m<\e[m\e[0;31m\u\e[m\e[0;33m@\e[m\e[0;31m\h\e[m\e[0;33m>\e[m \e[0;33m[\e[m\w\e[0;33m]\e[m \e[0;34m\l\e[m \e[0;31mlvl\e[m(\e[0;33m${SHLVL}\e[m) \e[0;31m!\e[m\e[0;33m\!\e[m \e[0;31mjobs\e[m(\e[0;33m\j\e[m) \D{%A %m-%d-%Y %X} \e[0;31mexit\e[m(\e[0;33m$?\e[m)\n$ '
 export CLICOLOR=1
