@@ -36,6 +36,9 @@ multiuser on
 aclchg vagrant,root,admin,Admin,administrator,Administrator,training,test,testuser -rwx "#?"
 # acladd training luXfQCsdHd4zQ # requires password: training
 
+# http://chenyufei.info/blog/2011-12-15/prevent-vim-less-clear-screen-on-exit/
+alterscreen off
+
 termcap  facit|vt100|xterm LP:G0
 terminfo facit|vt100|xterm LP:G0
 
