@@ -41,6 +41,7 @@ channels = (
   { name = "##uiuclug"; chatnet = "Freenode"; autojoin = "yes"; }
   { name = "##opennsm"; chatnet = "Freenode"; autojoin = "yes"; }
   { name = "##evlug"; chatnet = "Freenode"; autojoin = "yes"; }
+  { name = "##uiuc-sigpony"; chatnet = "Freenode"; autojoin = "yes"; }
 );
 
 aliases = {
