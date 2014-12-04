@@ -59,6 +59,15 @@ auto_view text/html
 bind editor <Tab> complete-query
 bind editor ^T complete
 bind editor <space> noop
+bind pager p   previous-page
+bind pager n   next-page
+bind pager a view-attachments
+bind pager g top
+bind pager G bottom
+bind pager j next-line
+bind pager k previous-line
+bind pager i edit
+bind pager / search
 
 # Gmail-style keyboard shortcuts
 macro index,pager y "<enter-command>unset trash\n <delete-message>" "Gmail archive message"
