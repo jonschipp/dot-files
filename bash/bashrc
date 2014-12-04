@@ -53,6 +53,9 @@ set -o emacs
 # Allow forward search by disabling stop key (def:CTRL^S)
 stty stop ""
 
+# set CDPATH if interactive shell
+[[ $- == *i* ]] && export CDPATH=~/vagrant:~/repos/
+
 if [ -f ~/.git-completion.bash ]; then
 		source ~/.git-completion.bash
 fi
