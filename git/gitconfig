@@ -48,7 +48,10 @@
 [diff "exif"]
 	textconv = exiftool
 [alias]
-	deploy = !git checkout production && git pull && git merge development && git push && git checkout development
-
+	deploy  = !git checkout production && git pull && git merge development && git push && git checkout development
+        dd      = !git diff -R development
+        dp      = !git diff -R production
+        cd      = !git checkout development
+        cp      = !git checkout production
 #[http "git.host.org"] # Works in 1.8+
 #	proxy = socks5://127.0.0.1:50000

@@ -3,8 +3,8 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 [ -f ~/.muttrc ] &&  [ ! -L ~/.muttrc ] && mv ~/.muttrc ~/.muttrc.bak
 [ -d ~/.mutt ]   &&  [ ! -L ~/.muttrc ] && mv ~/.mutt ~/.mutt.bak
 
-ln -sf $DIR.muttrc ~/.muttrc
-ln -sf $DIR.mutt ~/.mutt
+cp $DIR/muttrc ~/.muttrc
+cp -r $DIR/mutt ~/.mutt
 
 echo "Links configured, run mutt!"
 
