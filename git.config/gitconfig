@@ -15,6 +15,7 @@
 # git config --global filter.indent.clean indent
 # git config --global filter.indent.smudge cat
 # git config --global pull.rebase false # auto rebase on git pull
+# git config --global http.sslVerify false
 
 [user]
 	name = Jon Schipp
@@ -48,5 +49,6 @@
 	textconv = exiftool
 [alias]
 	deploy = !git checkout production && git pull && git merge development && git push && git checkout development
+
 #[http "git.host.org"] # Works in 1.8+
 #	proxy = socks5://127.0.0.1:50000
