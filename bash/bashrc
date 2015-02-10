@@ -38,7 +38,7 @@ stty -ixon
 
 # System-wide .bashrc file for interactive bash(1) shells.
 if [ -z "$PS1" ]; then
-   return
+  return
 fi
 
 # Make bash check its window size after a process completes
@@ -57,50 +57,50 @@ stty stop ""
 [[ $- == *i* ]] && export CDPATH=~/vagrant:~/repos/
 
 if [ -f ~/.git-completion.bash ]; then
-		source ~/.git-completion.bash
+  source ~/.git-completion.bash
 fi
 
 # Shell functions
 
 colorize () {
-	awk '{ for(i=1;i<=NF;i++) printf("\x1b[%sm %s \x1b[0m",(i%7)+31,$i); print ""}'
+  awk '{ for(i=1;i<=NF;i++) printf("\x1b[%sm %s \x1b[0m",(i%7)+31,$i); print ""}'
 }
 
 keeptrying ()
 {
-    while true; do
-        git pull && break;
-        sleep 10;
-    done
+  while true; do
+    git pull && break;
+    sleep 10;
+  done
 }
 
 shelldebug () {
-	if [ $1 == "on" ]; then
-		set -xv
-	elif [ $1 == "off" ]; then
-		set +xv
-	else
-		echo "Error: Use arguments \`\`on'' or \`\`off''."
-	fi
+  if [ $1 == "on" ]; then
+    set -xv
+  elif [ $1 == "off" ]; then
+    set +xv
+  else
+    echo "Error: Use arguments \`\`on'' or \`\`off''."
+  fi
 }
 
 rebuild () {
-        vagrant destroy && vagrant up --no-provision
-        vagrant provision --provision-with shell
-        vagrant reload --no-provision
+  vagrant destroy && vagrant up --no-provision
+  vagrant provision --provision-with shell
+  vagrant reload --no-provision
 }
 
 provision () {
-        vagrant provision --provision-with=$1
+  vagrant provision --provision-with=$1
 }
 
 invoice (){
-        awk -F '[{}]' -v wage=$1 -v expense=0 \
-        '/hourrow/ { labor+=$4 } # Multiply number of hours by wage
-        /feerow/ { expense+=$4 } # Add expenses
-        END {
-                print "Total: $"(labor*wage)+expense
-        }' $2
+  awk -F '[{}]' -v wage=$1 -v expense=0 \
+  '/hourrow/ { labor+=$4 } # Multiply number of hours by wage
+  /feerow/ { expense+=$4 } # Add expenses
+  END {
+          print "Total: $"(labor*wage)+expense
+  }' $2
 }
 
 check_bpf() {
@@ -111,8 +111,8 @@ check_bpf() {
 }
 
 SSH_COMPLETE=( $(cat ~/.ssh/known_hosts | \
-	cut -f 1 -d ' ' | \
-	sed -e s/,.*//g | \
-	uniq | \
-	egrep -v [0123456789]) )
-	complete -o default -W "${SSH_COMPLETE[*]}" ssh
+  cut -f 1 -d ' ' | \
+  sed -e s/,.*//g | \
+  uniq | \
+  egrep -v [0123456789]) )
+  complete -o default -W "${SSH_COMPLETE[*]}" ssh
