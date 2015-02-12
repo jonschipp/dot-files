@@ -53,5 +53,7 @@
         dp      = !git diff -R production
         cd      = !git checkout development
         cp      = !git checkout production
+        p       = !git pull
+        pp      = !git push
 #[http "git.host.org"] # Works in 1.8+
 #	proxy = socks5://127.0.0.1:50000
