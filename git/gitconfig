@@ -18,42 +18,42 @@
 # git config --global http.sslVerify false
 
 [user]
-	name = Jon Schipp
-	email = jonschipp@gmail.com
+  name = Jon Schipp
+  email = jonschipp@gmail.com
 [core]
-	editor = vim
-	excludesfile = ~/.gitignore_global
-	whitespace = trailing-space,space-before-tab,indent-wth-non-tab
+  editor = vim
+  excludesfile = ~/.gitignore_global
+  whitespace = trailing-space,space-before-tab,indent-wth-non-tab
 [color]
-	ui = true
+  ui = true
 [pull]
-	rebase = true
+  rebase = true
 [push]
-	default = simple
-	rebase = true
+  default = simple
+  rebase = true
 [sendemail]
-        smtpencryption = tls
-	smtpserver = smtp.gmail.com
-	smtpuser = user@org.com
-	smtppass = password
-	smtpserverport = 587
+  smtpencryption = tls
+  smtpserver = smtp.gmail.com
+  smtpuser = user@org.com
+  smtppass = password
+  smtpserverport = 587
 [push]
-	default = matching
+  default = matching
 [pull]
-	rebase = false
+  rebase = false
 [commit]
-	template = /Users/jonschipp/.gitmessage
+  template = /Users/jonschipp/.gitmessage
 [diff "word"]
-	textconv = strings
+  textconv = strings
 [diff "exif"]
-	textconv = exiftool
+  textconv = exiftool
 [alias]
-	deploy  = !git checkout production && git pull && git merge development && git push && git checkout development
-        dd      = !git diff -R development
-        dp      = !git diff -R production
-        cd      = !git checkout development
-        cp      = !git checkout production
-        p       = !git pull
-        pp      = !git push
+  deploy  = !git checkout production && git pull && git merge development && git push && git checkout development
+  dd      = !git diff -R development
+  dp      = !git diff -R production
+  cd      = !git checkout development
+  cp      = !git checkout production
+  p       = !git pull
+  pp      = !git push
 #[http "git.host.org"] # Works in 1.8+
-#	proxy = socks5://127.0.0.1:50000
+#  proxy = socks5://127.0.0.1:50000
