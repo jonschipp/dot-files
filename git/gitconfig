@@ -57,5 +57,8 @@
   pp      = !git push
   p       = !git pull
   b       = !git branch -v
+  s       = !git status
+  ds      = !git diff --staged
+  d       = !git diff
 #[http "git.host.org"] # Works in 1.8+
 #  proxy = socks5://127.0.0.1:50000
