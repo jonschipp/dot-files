@@ -110,6 +110,15 @@ check_bpf () {
   echo -en "$exp" | tcpdump -r - "$*" 2>/dev/null && echo "$valid" || echo "$invalid"
 }
 
+plot(){
+  [ -f $(which gnuplot) ] || { echo "gnuplot not in PATH" && exit 1; }
+  plottype=${1:-lines}
+  plotimg=${2:-png}
+  tmp="/tmp/plot-${RANDOM}.${plotimg}"
+  gnuplot -p -e "set terminal ${plotimg}; plot '/dev/stdin' with ${plottype}" > $tmp
+  [ -f $tmp ] && open $tmp
+}
+
 SSH_COMPLETE=( $(cat ~/.ssh/known_hosts | \
   cut -f 1 -d ' ' | \
   sed -e s/,.*//g | \
