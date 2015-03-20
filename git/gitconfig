@@ -5,6 +5,7 @@
 # git config --global color.ui true
 # git config --global core.excludesfile ~/.gitignore_global
 # git config --global core.editor vim
+# git config --global branch.autosetuprebase always
 # git config --system ... # for /etc/gitconfig changes
 # git config --list
 # git config --global commit.template $HOME/.gitmessage
@@ -24,6 +25,8 @@
   editor = vim
   excludesfile = ~/.gitignore_global
   whitespace = trailing-space,space-before-tab,indent-wth-non-tab
+[branch]
+  autosetuprebase = always
 [color]
   ui = true
 [pull]
@@ -39,8 +42,6 @@
   smtpserverport = 587
 [push]
   default = matching
-[pull]
-  rebase = false
 [commit]
   template = /Users/jonschipp/.gitmessage
 [diff "word"]
