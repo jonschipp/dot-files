@@ -119,6 +119,11 @@ plot(){
   [ -f $tmp ] && open $tmp
 }
 
+mem(){ ps -eo rss,pid,command | grep -v grep | grep -i $@ | awk '{printf $1/1024 "MB"; $1=""; print }'; }
+cpu(){ ps -eo %cpu,pid,command | grep -v grep | grep -i $@; }
+influx(){ curl -G 'http://SERVER:8086/db/collectd/series?u=USER&p=PASS' --data-urlencode q="$@"; }
+jfield() { jq ".[0].points[][$1]"; }
+
 SSH_COMPLETE=( $(cat ~/.ssh/known_hosts | \
   cut -f 1 -d ' ' | \
   sed -e s/,.*//g | \
