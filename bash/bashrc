@@ -124,6 +124,21 @@ cpu(){ ps -eo %cpu,pid,command | grep -v grep | grep -i $@; }
 influx(){ curl -G 'http://SERVER:8086/db/collectd/series?u=USER&p=PASS' --data-urlencode q="$@"; }
 jfield() { jq ".[0].points[][$1]"; }
 
+hide(){
+  defaults write com.apple.finder CreateDesktop -bool false
+  killall Finder
+}
+
+unhide(){
+  defaults write com.apple.finder CreateDesktop -bool true
+  killall Finder
+}
+
+prompt(){
+  export PS1="${yellow}<${normal}${redf}${1:-\u}${normal}${yellow}@${normal}${redf}${2:-\h}${normal}${yellow}>${normal} ${yellow}[${normal}\w${yellow}]${normal}: "
+  #export PS1="\e[0;33m<\e[m\e[0;31m${1:-\u}\e[m\e[0;33m@\e[m\e[0;31m${2:-\h}\e[m\e[0;33m>\e[m \e[0;33m[\e[m\w\e[0;33m]\e[m: "
+}
+
 SSH_COMPLETE=( $(cat ~/.ssh/known_hosts | \
   cut -f 1 -d ' ' | \
   sed -e s/,.*//g | \
