@@ -28,6 +28,7 @@ export GREP_OPTIONS='--color=auto'
 export LSCOLORS=ExFxCxDxBxegedabagacad
 export LESSOPEN="| /usr/local/Cellar/source-highlight/3.1.7/bin/src-hilite-lesspipe.sh %s" # Install GNU Source-Highlights
 export LESS=' -R '
+export GOPATH="$HOME/go"
 
 HISTFILESIZE=1000000
 HISTSIZE=1000000
