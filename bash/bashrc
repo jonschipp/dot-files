@@ -33,6 +33,8 @@ export GOPATH="$HOME/go"
 HISTFILESIZE=1000000
 HISTSIZE=1000000
 
+# Aliases
+
 # Allow forward-search with ^S instead of sending pause to terminal
 stty -ixon
 
@@ -138,6 +140,14 @@ unhide(){
 prompt(){
   export PS1="${yellow}<${normal}${redf}${1:-\u}${normal}${yellow}@${normal}${redf}${2:-\h}${normal}${yellow}>${normal} ${yellow}[${normal}\w${yellow}]${normal}: "
   #export PS1="\e[0;33m<\e[m\e[0;31m${1:-\u}\e[m\e[0;33m@\e[m\e[0;31m${2:-\h}\e[m\e[0;33m>\e[m \e[0;33m[\e[m\w\e[0;33m]\e[m: "
+}
+
+delete_branches(){
+  for i in $(git branch | grep -v \*); do
+    read -p "Delete $i branch? [n|y]: " ans
+    [[ "$ans" == "y" ]] && git branch -D ${i}
+    unset ans
+  done
 }
 
 SSH_COMPLETE=( $(cat ~/.ssh/known_hosts | \
