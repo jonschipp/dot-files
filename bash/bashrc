@@ -150,6 +150,12 @@ delete_branches(){
   done
 }
 
+getcommit(){
+  local file="$1"
+  [[ "$file" ]] || { printf "Usage: getcommit <file_in_git>\n" && return; }
+  git rev-list -n 1 HEAD -- "$file"
+}
+
 SSH_COMPLETE=( $(cat ~/.ssh/known_hosts | \
   cut -f 1 -d ' ' | \
   sed -e s/,.*//g | \
