@@ -55,6 +55,7 @@
   cd      = !git checkout development
   cp      = !git checkout production
   cc      = !git checkout configs
+  cm      = !git checkout master
   pp      = !git push
   p       = !git pull
   b       = !git branch -v

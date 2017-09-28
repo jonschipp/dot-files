@@ -14,6 +14,11 @@ function FindProxyForURL(url, host) {
     )
         return "SOCKS 127.0.0.1:50000"; // (IP:port)
 
+    if (
+        dnsDomainIs(host, "draconyx.net")
+    )
+        return "PROXY 127.0.0.1:80"
+
     //if (dnsDomainIs(host, "test.com"))
     //    return "SOCKS 127.0.0.1:1234"; // (IP:port)
 
