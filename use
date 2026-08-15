@@ -1,0 +1,122 @@
+#!/usr/bin/env bash
+#
+# Symlink the dot-files in this repo into the locations each tool reads them
+# from. Existing real files are moved aside to <file>.bak; existing symlinks
+# are replaced. Run with no arguments to link everything, or name the tools:
+#
+#   ./use              # all tools
+#   ./use git tmux     # just these
+#   DRYRUN=1 ./use     # show what would happen
+#
+# Tools: bash firefox ghostty git irssi iterm2 mutt screen tmux weechat
+
+set -u
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DRYRUN="${DRYRUN:-}"
+
+link() {
+  local src="$DIR/$1" dst="$2"
+
+  if [ ! -e "$src" ]; then
+    echo "skip: $src does not exist"
+    return
+  fi
+
+  if [ -n "$DRYRUN" ]; then
+    echo "would link: $dst -> $src"
+    return
+  fi
+
+  mkdir -p "$(dirname "$dst")"
+
+  # Move a real file/dir out of the way, but never clobber an existing backup.
+  if [ -e "$dst" ] && [ ! -L "$dst" ]; then
+    if [ -e "$dst.bak" ]; then
+      echo "skip: $dst exists and $dst.bak is already taken"
+      return
+    fi
+    mv "$dst" "$dst.bak"
+    echo "backed up: $dst -> $dst.bak"
+  fi
+
+  ln -sfn "$src" "$dst"
+  echo "linked: $dst -> $src"
+}
+
+use_bash() {
+  link bash/bashrc "$HOME/.bashrc"
+}
+
+use_firefox() {
+  # Firefox has no fixed location for a PAC file: point it at the file via
+  # Settings > Network Settings > Automatic proxy configuration URL.
+  echo "firefox: no symlink needed, set the proxy config URL to:"
+  echo "  file://$DIR/firefox/proxy.pac"
+  [ -e "$DIR/firefox/proxy2.pac" ] && echo "  file://$DIR/firefox/proxy2.pac"
+}
+
+use_git() {
+  link git/gitconfig          "$HOME/.gitconfig"
+  link git/gitignore          "$HOME/.gitignore_global"  # gitconfig core.excludesfile
+  link git/gitmessage         "$HOME/.gitmessage"        # gitconfig commit.template
+  link git/git-completion.bash "$HOME/.git-completion.bash"
+  link git/profile            "$HOME/.profile"
+}
+
+use_ghostty() {
+  # Ghostty reads XDG config on macOS too. These keybinds forward Cmd chords
+  # to tmux as escape sequences; see tmux/tmux.conf.
+  link ghostty/config "$HOME/.config/ghostty/config"
+}
+
+use_irssi() {
+  link irssi/config "$HOME/.irssi/config"
+}
+
+use_iterm2() {
+  # iTerm2 reads this plist, but cfprefsd caches preferences and can overwrite
+  # a symlinked plist. The supported route is:
+  #   Preferences > General > Preferences > "Load preferences from a custom
+  #   folder or URL" -> $DIR/iterm2
+  link iterm2/com.googlecode.iterm2.plist \
+    "$HOME/Library/Preferences/com.googlecode.iterm2.plist"
+  echo "iterm2: quit iTerm2 before linking, or use the custom-folder setting:"
+  echo "  $DIR/iterm2"
+}
+
+use_mutt() {
+  link mutt/muttrc "$HOME/.muttrc"
+  link mutt/mutt   "$HOME/.mutt"
+}
+
+use_screen() {
+  link screen/screenrc "$HOME/.screenrc"
+}
+
+use_tmux() {
+  link tmux/tmux.conf            "$HOME/.tmux.conf"
+  link tmux/tmux.conf            "$HOME/.rmux.conf"
+  link tmux/tmuxcolors-dark.conf "$HOME/.tmux/tmuxcolors-dark.conf"  # sourced by tmux.conf
+}
+
+use_weechat() {
+  # WeeChat 3.2+ prefers XDG (~/.config/weechat); older versions use ~/.weechat.
+  if [ -d "$HOME/.weechat" ]; then
+    link weechat/irc.conf "$HOME/.weechat/irc.conf"
+  else
+    link weechat/irc.conf "$HOME/.config/weechat/irc.conf"
+  fi
+}
+
+ALL="bash firefox ghostty git irssi iterm2 mutt screen tmux weechat"
+TOOLS="${*:-$ALL}"
+
+for tool in $TOOLS; do
+  if ! declare -F "use_$tool" >/dev/null; then
+    echo "unknown tool: $tool (known: $ALL)" >&2
+    exit 1
+  fi
+  echo "== $tool"
+  "use_$tool"
+done

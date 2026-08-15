@@ -1,0 +1,164 @@
+# Variables
+
+# Colors for prompt
+normal="$(tput sgr0)"
+bold="$(tput bold)"
+underline="$(tput smul)"
+yellow="$(tput setaf 3)"
+blackf="$(tput setaf 0)"
+blackb="$(tput setab 0)"
+redf="$(tput setaf 1)"
+redb="$(tput setab 1)"
+greenf="$(tput setaf 2)"
+greenb="$(tput setab 2)"
+bluef="$(tput setaf 4)"
+blueb="$(tput setab 4)"
+magentaf="$(tput setaf 5)"
+magentab="$(tput setab 5)"
+cyanf="$(tput setaf 6)"
+cyanb="$(tput setab 6)"
+whitef="$(tput setaf 7)"
+whiteb="$(tput setab 7)"
+
+#export PS1='\n\e[0;33m<\e[m\e[0;31m\u\e[m\e[0;33m@\e[m\e[0;31m\h\e[m\e[0;33m>\e[m \e[0;33m[\e[m\w\e[0;33m]\e[m \e[0;34m\l\e[m \e[0;31mlvl\e[m(\e[0;33m${SHLVL}\e[m) \e[0;31m!\e[m\e[0;33m\!\e[m \e[0;31mjobs\e[m(\e[0;33m\j\e[m) \D{%A %m-%d-%Y %X} \e[0;31mexit\e[m(\e[0;33m$?\e[m)\n$ '
+export PS1='\n${yellow}<${normal}${redf}\u${normal}${yellow}@${normal}${redf}\h${normal}${yellow}>${normal} ${yellow}[${normal}\w${yellow}]${normal} ${yellow}$(vcprompt -f "[%b:%u%m]")${normal} ${bluef}\l${normal} ${redf}lvl${normal}(${yellow}$SHLVL${normal}) ${redf}!${normal}${yellow}\!${normal} ${redf}jobs${normal}(${yellow}\j${normal}) \D{%A %m-%d-%Y %X} ${redf}exit${normal}(${yellow}$?${normal})\n$ '
+export EDITOR=vim
+export CLICOLOR=1
+export GREP_OPTIONS='--color=auto'
+export LSCOLORS=ExFxCxDxBxegedabagacad
+export LESSOPEN="| /usr/local/Cellar/source-highlight/3.1.7/bin/src-hilite-lesspipe.sh %s" # Install GNU Source-Highlights
+export LESS=' -R '
+export GOPATH="$HOME/go"
+
+HISTFILESIZE=1000000
+HISTSIZE=1000000
+
+# Aliases
+
+# Allow forward-search with ^S instead of sending pause to terminal
+stty -ixon
+
+# System-wide .bashrc file for interactive bash(1) shells.
+if [ -z "$PS1" ]; then
+  return
+fi
+
+# Make bash check its window size after a process completes
+shopt -s checkwinsize
+# Save multi-line commands to history
+shopt -s cmdhist
+# Append, don't overwrite, history
+shopt -s histappend
+# Use emacs mode
+set -o emacs
+
+# Allow forward search by disabling stop key (def:CTRL^S)
+stty stop ""
+
+# set CDPATH if interactive shell
+[[ $- == *i* ]] && export CDPATH=~/vagrant:~/repos/
+
+if [ -f ~/.git-completion.bash ]; then
+  source ~/.git-completion.bash
+fi
+
+# Shell functions
+
+colorize () {
+  awk '{ for(i=1;i<=NF;i++) printf("\x1b[%sm %s \x1b[0m",(i%7)+31,$i); print ""}'
+}
+
+keeptrying ()
+{
+  while true; do
+    git pull && break;
+    sleep 10;
+  done
+}
+
+shelldebug () {
+  if [ $1 == "on" ]; then
+    set -xv
+  elif [ $1 == "off" ]; then
+    set +xv
+  else
+    echo "Error: Use arguments \`\`on'' or \`\`off''."
+  fi
+}
+
+rebuild () {
+  vagrant destroy && vagrant up --no-provision
+  vagrant provision --provision-with shell
+  vagrant reload --no-provision
+}
+
+provision () {
+  vagrant provision --provision-with=$1
+}
+
+invoice (){
+  awk -F '[{}]' -v wage=$1 -v expense=0 \
+  '/hourrow/ { labor+=$4 } # Multiply number of hours by wage
+  /feerow/ { expense+=$4 } # Add expenses
+  END {
+          print "Total: $"(labor*wage)+expense
+  }' $2
+}
+
+check_bpf () {
+  [ "$1" ] || { echo "No BPF specified" && return 1; }
+  exp="\0324\0303\0262\0241\02\0\04\0\0\0\0\0\0\0\0\0\0377\0377\0\0\01\0\0\0"
+  valid="Valid Ethernet BPF"
+  invalid="Invalid Ethernet BPF!"
+  echo -en "$exp" | tcpdump -r - "$*" 2>/dev/null && echo "$valid" || echo "$invalid"
+}
+
+plot(){
+  [ -f $(which gnuplot) ] || { echo "gnuplot not in PATH" && exit 1; }
+  plottype=${1:-lines}
+  plotimg=${2:-png}
+  tmp="/tmp/plot-${RANDOM}.${plotimg}"
+  gnuplot -p -e "set terminal ${plotimg}; plot '/dev/stdin' with ${plottype}" > $tmp
+  [ -f $tmp ] && open $tmp
+}
+
+mem(){ ps -eo rss,pid,command | grep -v grep | grep -i $@ | awk '{printf $1/1024 "MB"; $1=""; print }'; }
+cpu(){ ps -eo %cpu,pid,command | grep -v grep | grep -i $@; }
+influx(){ curl -G 'http://SERVER:8086/db/collectd/series?u=USER&p=PASS' --data-urlencode q="$@"; }
+jfield() { jq ".[0].points[][$1]"; }
+
+hide(){
+  defaults write com.apple.finder CreateDesktop -bool false
+  killall Finder
+}
+
+unhide(){
+  defaults write com.apple.finder CreateDesktop -bool true
+  killall Finder
+}
+
+prompt(){
+  export PS1="${yellow}<${normal}${redf}${1:-\u}${normal}${yellow}@${normal}${redf}${2:-\h}${normal}${yellow}>${normal} ${yellow}[${normal}\w${yellow}]${normal}: "
+  #export PS1="\e[0;33m<\e[m\e[0;31m${1:-\u}\e[m\e[0;33m@\e[m\e[0;31m${2:-\h}\e[m\e[0;33m>\e[m \e[0;33m[\e[m\w\e[0;33m]\e[m: "
+}
+
+delete_branches(){
+  for i in $(git branch | grep -v \*); do
+    read -p "Delete $i branch? [n|y]: " ans
+    [[ "$ans" == "y" ]] && git branch -D ${i}
+    unset ans
+  done
+}
+
+getcommit(){
+  local file="$1"
+  [[ "$file" ]] || { printf "Usage: getcommit <file_in_git>\n" && return; }
+  git rev-list -n 1 HEAD -- "$file"
+}
+
+SSH_COMPLETE=( $(cat ~/.ssh/known_hosts | \
+  cut -f 1 -d ' ' | \
+  sed -e s/,.*//g | \
+  uniq | \
+  egrep -v [0123456789]) )
+  complete -o default -W "${SSH_COMPLETE[*]}" ssh
