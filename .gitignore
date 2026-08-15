@@ -1,0 +1,15 @@
+# Session-continuity scratch, generated per-machine by the WORKLOG hooks
+# (~/.claude/hooks/worklog-*.sh). It quotes prompts and local paths verbatim,
+# so it is deliberately never committed.
+WORKLOG.md
+
+# macOS
+.DS_Store
+
+# Editor swap files
+*.swp
+*.swo
+*~
+
+# Per-machine Claude Code session settings
+.claude/

@@ -3078,7 +3078,7 @@
 												<key>Program</key>
 												<dict>
 													<key>Command</key>
-													<string>login -fp "jschipp"</string>
+													<string>login -fp "$USER"</string>
 													<key>Type</key>
 													<string>Command</string>
 												</dict>
@@ -3871,7 +3871,7 @@
 												<key>Program</key>
 												<dict>
 													<key>Command</key>
-													<string>login -fp "jschipp"</string>
+													<string>login -fp "$USER"</string>
 													<key>Type</key>
 													<string>Command</string>
 												</dict>
@@ -4666,7 +4666,7 @@
 												<key>Program</key>
 												<dict>
 													<key>Command</key>
-													<string>login -fp "jschipp"</string>
+													<string>login -fp "$USER"</string>
 													<key>Type</key>
 													<string>Command</string>
 												</dict>
@@ -5479,7 +5479,7 @@
 												<key>Program</key>
 												<dict>
 													<key>Command</key>
-													<string>login -fp "jschipp"</string>
+													<string>login -fp "$USER"</string>
 													<key>Type</key>
 													<string>Command</string>
 												</dict>
@@ -6270,7 +6270,7 @@
 												<key>Program</key>
 												<dict>
 													<key>Command</key>
-													<string>login -fp "jschipp"</string>
+													<string>login -fp "$USER"</string>
 													<key>Type</key>
 													<string>Command</string>
 												</dict>
@@ -7063,7 +7063,7 @@
 												<key>Program</key>
 												<dict>
 													<key>Command</key>
-													<string>login -fp "jschipp"</string>
+													<string>login -fp "$USER"</string>
 													<key>Type</key>
 													<string>Command</string>
 												</dict>
@@ -7894,7 +7894,7 @@
 										<key>Program</key>
 										<dict>
 											<key>Command</key>
-											<string>login -fp "jschipp"</string>
+											<string>login -fp "$USER"</string>
 											<key>Type</key>
 											<string>Command</string>
 										</dict>
@@ -8685,7 +8685,7 @@
 										<key>Program</key>
 										<dict>
 											<key>Command</key>
-											<string>login -fp "jschipp"</string>
+											<string>login -fp "$USER"</string>
 											<key>Type</key>
 											<string>Command</string>
 										</dict>
@@ -9499,7 +9499,7 @@
 										<key>Program</key>
 										<dict>
 											<key>Command</key>
-											<string>login -fp "jschipp"</string>
+											<string>login -fp "$USER"</string>
 											<key>Type</key>
 											<string>Command</string>
 										</dict>
@@ -10290,7 +10290,7 @@
 										<key>Program</key>
 										<dict>
 											<key>Command</key>
-											<string>login -fp "jschipp"</string>
+											<string>login -fp "$USER"</string>
 											<key>Type</key>
 											<string>Command</string>
 										</dict>

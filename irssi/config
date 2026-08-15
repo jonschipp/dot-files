@@ -205,8 +205,8 @@ statusbar = {
 };
 settings = {
   core = {
-    real_name = "jschipp";
-    user_name = "jschipp";
+    real_name = "Jon Schipp";
+    user_name = "keisterstash";
     nick = "keisterstash";
   };
   "fe-text" = { actlist_sort = "refnum"; };
