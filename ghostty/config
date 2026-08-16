@@ -10,3 +10,6 @@ keybind = super+left=text:"\x1b[3006~"
 keybind = super+right=text:"\x1b[3007~"
 keybind = super+up=text:"\x1b[3008~"
 keybind = super+down=text:"\x1b[3009~"
+
+# Colors
+theme = iTerm2 Solarized Dark
