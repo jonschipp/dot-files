@@ -28,7 +28,10 @@ export GREP_OPTIONS='--color=auto'
 export LSCOLORS=ExFxCxDxBxegedabagacad
 export LESSOPEN="| /usr/local/Cellar/source-highlight/3.1.7/bin/src-hilite-lesspipe.sh %s" # Install GNU Source-Highlights
 export LESS=' -R '
+export PATH="$HOME/.local/bin:$HOME/.opencode/bin:$PATH"  # lmstudio adds its own bin below
 export GOPATH="$HOME/go"
+# Per-repo TODO helper (WORKLOG continuity system)
+alias todo='~/.claude/hooks/worklog-todo.sh'
 
 HISTFILESIZE=1000000
 HISTSIZE=1000000
@@ -162,3 +165,14 @@ SSH_COMPLETE=( $(cat ~/.ssh/known_hosts | \
   uniq | \
   egrep -v [0123456789]) )
   complete -o default -W "${SSH_COMPLETE[*]}" ssh
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:$HOME/.lmstudio/bin"
+# End of LM Studio CLI section
+
+# MLX python env: create once, then activate. Guarded so every new shell isn't
+# paying for a venv rebuild.
+if [ ! -d "$HOME/.vmlx-env" ]; then
+  python3 -m venv "$HOME/.vmlx-env"
+fi
+[ -f "$HOME/.vmlx-env/bin/activate" ] && . "$HOME/.vmlx-env/bin/activate"
