@@ -11,5 +11,5 @@ keybind = super+right=text:"\x1b[3007~"
 keybind = super+up=text:"\x1b[3008~"
 keybind = super+down=text:"\x1b[3009~"
 
-# Colors
-theme = iTerm2 Solarized Dark
+# Colors: follow the system appearance, using the themes in ghostty/themes/.
+theme = dark:solarized-dark,light:solarized-light

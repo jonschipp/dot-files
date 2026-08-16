@@ -56,18 +56,22 @@ use_firefox() {
   [ -e "$DIR/firefox/proxy2.pac" ] && echo "  file://$DIR/firefox/proxy2.pac"
 }
 
+use_ghostty() {
+  if [ -d "$HOME/.config/ghostty" ] || [ -L "$HOME/.config/ghostty" ]; then
+    link ghostty/config "$HOME/.config/ghostty/config"
+    link ghostty/themes/solarized-dark "$HOME/.config/ghostty/themes/solarized-dark"
+    link ghostty/themes/solarized-light "$HOME/.config/ghostty/themes/solarized-light"
+  else
+    echo "ghostty: skipped, $HOME/.config/ghostty does not exist"
+  fi
+}
+
 use_git() {
   link git/gitconfig          "$HOME/.gitconfig"
   link git/gitignore          "$HOME/.gitignore_global"  # gitconfig core.excludesfile
   link git/gitmessage         "$HOME/.gitmessage"        # gitconfig commit.template
   link git/git-completion.bash "$HOME/.git-completion.bash"
   link git/profile            "$HOME/.profile"
-}
-
-use_ghostty() {
-  # Ghostty reads XDG config on macOS too. These keybinds forward Cmd chords
-  # to tmux as escape sequences; see tmux/tmux.conf.
-  link ghostty/config "$HOME/.config/ghostty/config"
 }
 
 use_irssi() {
