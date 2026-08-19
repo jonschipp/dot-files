@@ -1,15 +1,21 @@
-# Send Cmd chords through to tmux as private escape sequences; tmux binds them
-# via user-keys (see tmux/tmux.conf, which must stay in sync with this list).
-keybind = super+d=text:"\x1b[3000~"
-keybind = super+shift+d=text:"\x1b[3001~"
-keybind = super+left_bracket=text:"\x1b[3002~"
-keybind = super+right_bracket=text:"\x1b[3003~"
-keybind = super+shift+enter=text:"\x1b[3004~"
-keybind = super+t=text:"\x1b[3005~"
-keybind = super+left=text:"\x1b[3006~"
-keybind = super+right=text:"\x1b[3007~"
-keybind = super+up=text:"\x1b[3008~"
-keybind = super+down=text:"\x1b[3009~"
+# Splits stay native to Ghostty: Cmd-d / Cmd-Shift-d to split, Cmd-[ / Cmd-]
+# to move between them, Cmd-Enter to zoom.
+keybind = super+d=new_split:right
+keybind = super+shift+d=new_split:down
+keybind = super+left_bracket=goto_split:previous
+keybind = super+right_bracket=goto_split:next
+keybind = super+enter=toggle_split_zoom
+
+# Reload this config (Cmd+Shift+, still works too).
+keybind = super+r=reload_config
+
+# Remaining Cmd chords are sent through to tmux as private escape sequences;
+# tmux binds them via user-keys (tmux/tmux.conf must stay in sync with this).
+keybind = super+t=text:\x1b[3005~
+keybind = super+left=text:\x1b[3006~
+keybind = super+right=text:\x1b[3007~
+keybind = super+up=text:\x1b[3008~
+keybind = super+down=text:\x1b[3009~
 
 # Colors: follow the system appearance, using the themes in ghostty/themes/.
 theme = dark:solarized-dark,light:solarized-light
