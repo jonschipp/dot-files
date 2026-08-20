@@ -175,4 +175,7 @@ export PATH="$PATH:$HOME/.lmstudio/bin"
 if [ ! -d "$HOME/.vmlx-env" ]; then
   python3 -m venv "$HOME/.vmlx-env"
 fi
-[ -f "$HOME/.vmlx-env/bin/activate" ] && . "$HOME/.vmlx-env/bin/activate"
+
+vmlx_activate(){
+  [ -f "$HOME/.vmlx-env/bin/activate" ] && . "$HOME/.vmlx-env/bin/activate"
+}
