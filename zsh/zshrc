@@ -1,0 +1,203 @@
+# zshrc — ported from bash/bashrc in this repo.
+#
+# Loaded by zsh for every interactive shell (~/.zshrc). Login-shell-only setup
+# (Homebrew's shellenv) lives in zsh/zprofile.
+#
+# Section order mirrors bash/bashrc so the two can be diffed side by side.
+
+# Variables
+
+# Colors for prompt
+normal="$(tput sgr0)"
+bold="$(tput bold)"
+underline="$(tput smul)"
+yellow="$(tput setaf 3)"
+blackf="$(tput setaf 0)"
+blackb="$(tput setab 0)"
+redf="$(tput setaf 1)"
+redb="$(tput setab 1)"
+greenf="$(tput setaf 2)"
+greenb="$(tput setab 2)"
+bluef="$(tput setaf 4)"
+blueb="$(tput setab 4)"
+magentaf="$(tput setaf 5)"
+magentab="$(tput setab 5)"
+cyanf="$(tput setaf 6)"
+cyanb="$(tput setab 6)"
+whitef="$(tput setaf 7)"
+whiteb="$(tput setab 7)"
+
+# prompt_subst re-expands $(vcprompt) and $vars on every prompt draw, the way
+# bash's PS1 did. Colors are wrapped in %{...%} so zsh does not count the
+# escape bytes as printable width (bash needed \[...\] for the same reason).
+#
+# bash -> zsh prompt escapes: \u %n | \h %m | \w %~ | \l %l | \! %! | \j %j
+#                             $SHLVL %L | \D{} %D{} | $? %?
+setopt prompt_subst
+PROMPT='
+%{$yellow%}<%{$normal%}%{$redf%}%n%{$normal%}%{$yellow%}@%{$normal%}%{$redf%}%m%{$normal%}%{$yellow%}>%{$normal%} %{$yellow%}[%{$normal%}%~%{$yellow%}]%{$normal%} %{$yellow%}$(vcprompt -f "[%b:%u%m]")%{$normal%} %{$bluef%}%l%{$normal%} %{$redf%}lvl%{$normal%}(%{$yellow%}%L%{$normal%}) %{$redf%}!%{$normal%}%{$yellow%}%!%{$normal%} %{$redf%}jobs%{$normal%}(%{$yellow%}%j%{$normal%}) %D{%A %m-%d-%Y %X} %{$redf%}exit%{$normal%}(%{$yellow%}%?%{$normal%})
+$ '
+
+export EDITOR=vim
+export CLICOLOR=1
+export GREP_OPTIONS='--color=auto'
+export LSCOLORS=ExFxCxDxBxegedabagacad
+# GNU Source-Highlight, if installed. The bashrc hardcoded an Intel-Homebrew
+# Cellar path that does not exist on Apple Silicon; look it up instead.
+if (( $+commands[src-hilite-lesspipe.sh] )); then
+  export LESSOPEN="| $commands[src-hilite-lesspipe.sh] %s"
+fi
+export LESS=' -R '
+# Keep PATH free of duplicates: nested shells (SHLVL > 1) re-prepend these.
+typeset -U path PATH
+export PATH="$HOME/.local/bin:$HOME/.opencode/bin:$PATH"  # lmstudio adds its own bin below
+export GOPATH="$HOME/go"
+# Per-repo TODO helper (WORKLOG continuity system)
+alias todo='~/.claude/hooks/worklog-todo.sh'
+
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=1000000
+SAVEHIST=1000000
+
+# Aliases
+
+# Allow forward-search with ^S instead of sending pause to terminal
+stty -ixon
+
+# Interactive shells only.
+[[ -o interactive ]] || return
+
+# zsh checks the window size after every command on its own (no checkwinsize),
+# and always stores multi-line commands as one history entry (no cmdhist).
+# Append, don't overwrite, history
+setopt APPEND_HISTORY
+# Use emacs mode
+bindkey -e
+
+# Allow forward search by disabling stop key (def:CTRL^S)
+stty stop ""
+
+# set cdpath if interactive shell (zsh keeps cdpath and CDPATH in sync)
+cdpath=(~/vagrant ~/repos)
+
+# git-completion.bash is bash-only; zsh ships its own git completion, which
+# compinit below picks up.
+autoload -Uz compinit && compinit
+
+# Shell functions
+
+colorize () {
+  awk '{ for(i=1;i<=NF;i++) printf("\x1b[%sm %s \x1b[0m",(i%7)+31,$i); print ""}'
+}
+
+keeptrying ()
+{
+  while true; do
+    git pull && break;
+    sleep 10;
+  done
+}
+
+shelldebug () {
+  if [ "$1" = "on" ]; then
+    set -xv
+  elif [ "$1" = "off" ]; then
+    set +xv
+  else
+    echo "Error: Use arguments \`\`on'' or \`\`off''."
+  fi
+}
+
+rebuild () {
+  vagrant destroy && vagrant up --no-provision
+  vagrant provision --provision-with shell
+  vagrant reload --no-provision
+}
+
+provision () {
+  vagrant provision --provision-with=$1
+}
+
+invoice (){
+  awk -F '[{}]' -v wage=$1 -v expense=0 \
+  '/hourrow/ { labor+=$4 } # Multiply number of hours by wage
+  /feerow/ { expense+=$4 } # Add expenses
+  END {
+          print "Total: $"(labor*wage)+expense
+  }' $2
+}
+
+check_bpf () {
+  [ "$1" ] || { echo "No BPF specified" && return 1; }
+  exp="\0324\0303\0262\0241\02\0\04\0\0\0\0\0\0\0\0\0\0377\0377\0\0\01\0\0\0"
+  valid="Valid Ethernet BPF"
+  invalid="Invalid Ethernet BPF!"
+  echo -en "$exp" | tcpdump -r - "$*" 2>/dev/null && echo "$valid" || echo "$invalid"
+}
+
+plot(){
+  # bashrc used `exit 1` here, which killed the shell instead of the function.
+  (( $+commands[gnuplot] )) || { echo "gnuplot not in PATH" && return 1; }
+  plottype=${1:-lines}
+  plotimg=${2:-png}
+  tmp="/tmp/plot-${RANDOM}.${plotimg}"
+  gnuplot -p -e "set terminal ${plotimg}; plot '/dev/stdin' with ${plottype}" > $tmp
+  [ -f $tmp ] && open $tmp
+}
+
+mem(){ ps -eo rss,pid,command | grep -v grep | grep -i $@ | awk '{printf $1/1024 "MB"; $1=""; print }'; }
+cpu(){ ps -eo %cpu,pid,command | grep -v grep | grep -i $@; }
+influx(){ curl -G 'http://SERVER:8086/db/collectd/series?u=USER&p=PASS' --data-urlencode q="$@"; }
+jfield() { jq ".[0].points[][$1]"; }
+
+hide(){
+  defaults write com.apple.finder CreateDesktop -bool false
+  killall Finder
+}
+
+unhide(){
+  defaults write com.apple.finder CreateDesktop -bool true
+  killall Finder
+}
+
+prompt(){
+  PROMPT="%{$yellow%}<%{$normal%}%{$redf%}${1:-%n}%{$normal%}%{$yellow%}@%{$normal%}%{$redf%}${2:-%m}%{$normal%}%{$yellow%}>%{$normal%} %{$yellow%}[%{$normal%}%~%{$yellow%}]%{$normal%}: "
+}
+
+delete_branches(){
+  for i in $(git branch | grep -v \*); do
+    # zsh's read takes the prompt as "var?prompt" rather than bash's -p.
+    read "ans?Delete $i branch? [n|y]: "
+    [[ "$ans" == "y" ]] && git branch -D ${i}
+    unset ans
+  done
+}
+
+getcommit(){
+  local file="$1"
+  [[ "$file" ]] || { printf "Usage: getcommit <file_in_git>\n" && return; }
+  git rev-list -n 1 HEAD -- "$file"
+}
+
+# ssh host completion from known_hosts (bash used `complete -o default -W`).
+if [ -r "$HOME/.ssh/known_hosts" ]; then
+  ssh_hosts=(${(f)"$(cut -f 1 -d ' ' "$HOME/.ssh/known_hosts" | sed -e 's/,.*//g' | sort -u | grep -v '[0-9]')"})
+  [ ${#ssh_hosts} -gt 0 ] && \
+    zstyle ':completion:*:(ssh|scp|sftp|rsync):*' hosts $ssh_hosts
+  unset ssh_hosts
+fi
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:$HOME/.lmstudio/bin"
+# End of LM Studio CLI section
+
+# llm: toggle Claude Code onto a local vmlx model (llm on|off)
+# Sourced, not run: `on`/`off` set ANTHROPIC_* in this shell.
+[ -f ~/.local/bin/llm ] && . ~/.local/bin/llm
+
+# MLX python env: create once, then activate. Guarded so every new shell isn't
+# paying for a venv rebuild.
+if [ ! -d "$HOME/.vmlx-env" ]; then
+  python3 -m venv "$HOME/.vmlx-env"
+fi
+[ -f "$HOME/.vmlx-env/bin/activate" ] && . "$HOME/.vmlx-env/bin/activate"

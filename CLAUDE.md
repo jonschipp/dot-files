@@ -9,11 +9,24 @@ config file(s) under their repo-relative name (no leading dot):
 
 ```
 bash/bashrc          firefox/proxy.pac, proxy2.pac
+ghostty/config, ghostty/themes/
 git/gitconfig, gitignore, gitmessage, git-completion.bash, profile
 irssi/config         iterm2/com.googlecode.iterm2.plist
 mutt/muttrc, mutt/   screen/screenrc
 tmux/tmux.conf       weechat/irc.conf
+zsh/zshrc, zsh/zprofile
 ```
+
+`zsh/zshrc` is a port of `bash/bashrc` — same sections in the same order, so
+the two diff cleanly. Keep them in step when either changes. The port is not
+line-for-line: prompt escapes (`\u` → `%n`, `\!` → `%!`, …) and `%{…%}` width
+guards, `shopt` → `setopt`/`bindkey -e`, `HISTFILESIZE` → `SAVEHIST` +
+`HISTFILE`, bash `complete -W` for ssh hosts → a `zstyle … hosts` after
+`compinit`, and `read -p` → `read "var?prompt"`. Three bashrc bugs are fixed on
+the zsh side only: `plot` used `exit 1` (killed the shell), `LESSOPEN` pointed
+at a hardcoded Intel-Homebrew Cellar path, and PATH re-prepended itself in
+nested shells (`typeset -U path`). `zsh/zprofile` holds login-shell-only setup
+(Homebrew `shellenv`, arch-detected) and is sourced before `zsh/zshrc`.
 
 ## `./use` — the installer
 

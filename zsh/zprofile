@@ -1,0 +1,12 @@
+# zprofile — login-shell setup for zsh (~/.zprofile), sourced before ~/.zshrc.
+#
+# Homebrew's shellenv sets PATH/MANPATH/INFOPATH for the brew prefix. The
+# prefix differs by architecture, so try both rather than hardcoding one.
+
+for brew_bin in /opt/homebrew/bin/brew /usr/local/bin/brew; do
+  if [ -x "$brew_bin" ]; then
+    eval "$("$brew_bin" shellenv zsh)"
+    break
+  fi
+done
+unset brew_bin

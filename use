@@ -8,7 +8,7 @@
 #   ./use git tmux     # just these
 #   DRYRUN=1 ./use     # show what would happen
 #
-# Tools: bash firefox ghostty git irssi iterm2 mutt screen tmux weechat
+# Tools: bash firefox ghostty git irssi iterm2 mutt screen tmux weechat zsh
 
 set -u
 
@@ -113,7 +113,12 @@ use_weechat() {
   fi
 }
 
-ALL="bash firefox ghostty git irssi iterm2 mutt screen tmux weechat"
+use_zsh() {
+  link zsh/zshrc    "$HOME/.zshrc"     # every interactive zsh
+  link zsh/zprofile "$HOME/.zprofile"  # login shells only (brew shellenv)
+}
+
+ALL="bash firefox ghostty git irssi iterm2 mutt screen tmux weechat zsh"
 TOOLS="${*:-$ALL}"
 
 for tool in $TOOLS; do
