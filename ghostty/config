@@ -9,6 +9,12 @@ keybind = super+enter=toggle_split_zoom
 # Reload this config (Cmd+Shift+, still works too).
 keybind = super+r=reload_config
 
+# Quick Terminal drop-down overlay.
+keybind = super+shift+space=toggle_quick_terminal
+
+# Command palette (default is Cmd+Shift+P).
+keybind = super+i=toggle_command_palette
+
 # Remaining Cmd chords are sent through to tmux as private escape sequences;
 # tmux binds them via user-keys (tmux/tmux.conf must stay in sync with this).
 keybind = super+t=text:\x1b[3005~
