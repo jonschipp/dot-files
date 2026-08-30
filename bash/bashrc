@@ -30,6 +30,7 @@ export LESSOPEN="| /usr/local/Cellar/source-highlight/3.1.7/bin/src-hilite-lessp
 export LESS=' -R '
 export PATH="$HOME/.local/bin:$HOME/.opencode/bin:$PATH"  # lmstudio adds its own bin below
 export GOPATH="$HOME/go"
+export ANTHROPIC_DEFAULT_MODEL=sonnet
 # Per-repo TODO helper (WORKLOG continuity system)
 alias todo='~/.claude/hooks/worklog-todo.sh'
 
@@ -170,12 +171,25 @@ SSH_COMPLETE=( $(cat ~/.ssh/known_hosts | \
 export PATH="$PATH:$HOME/.lmstudio/bin"
 # End of LM Studio CLI section
 
-# MLX python env: create once, then activate. Guarded so every new shell isn't
-# paying for a venv rebuild.
-if [ ! -d "$HOME/.vmlx-env" ]; then
-  python3 -m venv "$HOME/.vmlx-env"
-fi
+# MLX python env: opt-in, never automatic. `vmlxon` activates it (creating the
+# venv on first use), `vmlxoff` drops back out. A plain shell stays untouched.
+vmlxon(){
+  if [ ! -d "$HOME/.vmlx-env" ]; then
+    python3 -m venv "$HOME/.vmlx-env" || return 1
+  fi
+  if [ -f "$HOME/.vmlx-env/bin/activate" ]; then
+    . "$HOME/.vmlx-env/bin/activate"
+  else
+    echo "vmlxon: $HOME/.vmlx-env/bin/activate not found" >&2
+    return 1
+  fi
+}
 
-vmlx_activate(){
-  [ -f "$HOME/.vmlx-env/bin/activate" ] && . "$HOME/.vmlx-env/bin/activate"
+vmlxoff(){
+  if command -v deactivate >/dev/null 2>&1; then
+    deactivate
+  else
+    echo "vmlxoff: no virtualenv active" >&2
+    return 1
+  fi
 }

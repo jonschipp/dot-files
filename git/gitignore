@@ -43,3 +43,10 @@ Thumbs.db
 *.swp
 *.swp
 *~
+
+**/.claude/settings.local.json
+
+**/.claude/.cc-writes/
+
+# graphify knowledge-graph build output (contains absolute local paths)
+graphify-out/
